@@ -27,6 +27,13 @@ class Read extends Conn {
         $this->Select = "SELECT * FROM {$Tabela} {$Termos}";
         $this->Execute();
     }
+    public function ExeReadSingle($Tabela, $Termos = null, $ParseString = null) {
+        if (!empty($ParseString)):
+            parse_str($ParseString, $this->Places);
+        endif;
+        $this->Select = "SELECT * FROM {$Tabela} {$Termos}";
+        $this->ExecuteSingle();
+    }
 
     public function setPlaces($ParseString) {
         parse_str($ParseString, $this->Places);
@@ -78,7 +85,18 @@ class Read extends Conn {
             $this->Result = $this->Read->fetchAll();
         } catch (PDOException $e) {
             $this->Result = null;
-            WSErro("<b>Erro ao Ler </b> {$e->getMessage()}", $e->getCode());
+            echo "<b>Erro ao Ler </b> {$e->getMessage()}", $e->getCode();
+        }
+    }
+    private function ExecuteSingle() {
+        $this->Connect();
+        try {
+            $this->getSyntax();
+            $this->Read->execute();
+            $this->Result = $this->Read->fetch();
+        } catch (PDOException $e) {
+            $this->Result = null;
+            echo "<b>Erro ao Ler </b> {$e->getMessage()}", $e->getCode();
         }
     }
 

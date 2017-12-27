@@ -22,17 +22,32 @@ endif;
 		<main>
 			<div class="container">
 				<div class="row">
-					<form>
+					<?php
+
+					$video = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+					if (isset($video)):
+						$video['video_path'] = ($_FILES['video_path']['tmp_name'] ? $_FILES['video_path'] : null );
+						require_once('model/videoManager.php');
+						$cadastra = new videoManager;
+						$cadastra->ExeCreate($video);
+						if ($cadastra->getResult()):
+			                header('Location: ../painel.php');
+			            else:
+			                WSErro($cadastra->getError()[0], $cadastra->getError()[1]);
+			            endif;
+					endif;
+					?>
+					<form name="VideoForm" action="" method="post" enctype="multipart/form-data">
 					  <div class="form-group">
 					    <label for="titulo">Título:</label>
-					    <input type="text" class="form-control">
+					    <input type="text" name="video_title" class="form-control">
 					  </div>
 					  <div class="form-group">
 					    <label for="titulo">Descrição:</label>
-					    <textarea class="form-control"></textarea>
+					    <textarea class="form-control" name="video_desc"></textarea>
 					  </div>
 					  <div class="form-group">
-	                	<input type="file" name="files[]" id="js-upload-files" multiple>
+	                	<input type="file" name="video_path"/>
 	              	  </div>
 	              	  <button type="submit" class="btn btn-success">Salvar</button>
 					</form>
