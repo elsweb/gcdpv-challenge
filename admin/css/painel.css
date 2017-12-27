@@ -1,1 +1,4 @@
 .video-card img{padding: 5px; border-radius: 10px;}
+.page{margin-top: 50px;}
+.paginator {list-style: none;}
+.paginator li{display: inline-block; padding: 5px;}

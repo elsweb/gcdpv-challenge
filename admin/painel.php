@@ -10,6 +10,14 @@ if ($logoff):
     unset($_SESSION['userlogin']);
     header('Location: index.php?exe=logoff');
 endif;
+$posti = 0;
+$getPage = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+$Pager = new Pager('painel.php?page=');
+$Pager->ExePager($getPage, 6);
+
+$readVideos = new Read;
+$readVideos->ExeRead("ws_video", "ORDER BY video_title ASC, video_id DESC LIMIT :limit OFFSET :offset", "limit={$Pager->getLimit()}&offset={$Pager->getOffset()}");
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,19 +36,43 @@ endif;
 			<div class="container">
 				<div class="row">
 					<div class="col-md 12">
-						<?php for($x=0; $x<6 ; $x++):?>
-							<div class='col-xs-6 col-md-4 text-center'>
-								<div class="w3-card-4 video-card">
-									<div class="w3-container w3-center">
-								    	<h3>title</h3>
-								    </div>
-									<img src="http://via.placeholder.com/140x100" alt="Norway">
-									<br>
-									<button class="btn btn-info">Editar</button>
-	  								<button class="btn btn-danger">Apagar</button>
+						<?php 
+							if ($readVideos->getResult()):
+							foreach ($readVideos->getResult() as $video):
+							
+						?>
+						<div class='col-xs-6 col-md-4 text-center'>
+							<div class="w3-card-4 video-card">
+								<div class="w3-container w3-center">
+							    	<h3><?=$video['video_title']?></h3>
+							    </div>
+								<video width="140" height="100">
+									<source src="<?=BASE?>uploads/<?=$video['video_path']?>" type="video/mp4">
+								</video>
+								<br>
+								<a href="video/delete?del_id=<?=$video['video_id'];?>" class="btn btn-danger">Apagar</a>
+							</div>
+						</div>
+						<?php 
+								endforeach;
+							else:
+							?>
+							<div class="row">
+								<div class="col-md-12">
+									<h3 class="alert alert-info text-center">Nenhum registro cadastrado</h3>
 								</div>
 							</div>
-						<?php endfor;?>
+							<?php	
+							endif;	
+							?>
+					</div>
+				</div>
+				<div class="row page">
+					<div class="col-md-12 text-center">
+						<?php
+						$Pager->ExePaginator("ws_video");
+						echo $Pager->getPaginator();
+						?>
 					</div>
 				</div>
 			</div>
