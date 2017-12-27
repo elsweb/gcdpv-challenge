@@ -5,7 +5,30 @@ Grupo CDPV Challenge
 ========================
 Projeto de competição do Grupo CDPV, uma simples plataforma de, armazenamento e visualização de videos.
 
-Document in build
+Bancos de dados suportados
+-------------------
+* MySQL
+
+Dependências
+------------
+
+### Runtime
+* PHP v5.5.x+
+* Wampserver v3.0.x+
+* MySQL Server
+
+###### Configuração
+------
+Crie um bando de dados, importe o arquivo database.sql e configure como abaixo no arquivo _app/config.php o banco.
+
+```php
+// database config
+define('HOST', 'localhost');
+define('USER', 'user-name');
+define('PASS', 'password');
+define('DBSA', 'database-name');
+```
+
 
 Author
 ------
