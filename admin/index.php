@@ -2,19 +2,18 @@
 session_start();
 require_once('../_app/config.php');
 $Login = new Login(3); // Nível 3
-//echo'<pre>';
-//	print_r($Login);
-//echo'</pre>';
-//Se tiver sessão
 if ($Login->CheckLogin()):
     header('Location: painel.php');
 endif;
 $dataLogin = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+$error = false;
+$success = false;
 if (!empty($dataLogin['AdminLogin'])):
     $Login->ExeLogin($dataLogin);
     if (!$Login->getResult()):
-        echo $Login->getError()[0];
+        $error = $Login->getError()[0];
     else:
+        sleep(1);
         header('Location: painel.php');
     endif;
 endif;
@@ -25,6 +24,7 @@ endif;
 	<meta charset="UTF-8">
 	<title>Administração - Video Manager</title>
     <link rel="stylesheet" href="<?=BASE?>_cdn/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?=BASE?>admin/css/style.css">
     <link rel="stylesheet" href="<?=BASE?>admin/css/login.css">
 </head>
     <body>
@@ -34,9 +34,14 @@ endif;
                 <div class="loginmodal-container">
                     <h1>Administração</h1><br>
                     <form name="AdminLoginForm" action="" method="post">
-                        <input type="email" name="user" placeholder="Username">
-                        <input type="password" name="pass" placeholder="Password">
+                        <input type="email" name="user" placeholder="E-mail">
+                        <input type="password" name="pass" placeholder="Senha">
                         <input type="submit" name="AdminLogin" class="login loginmodal-submit" value="Logar">
+                        <?php
+                            if($error):
+                                echo "<div class='alert alert-info'>$error</div>";
+                            endif;
+                        ?>
                     </form>
                 </div>
             </div>

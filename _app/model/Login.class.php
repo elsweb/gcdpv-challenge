@@ -48,7 +48,7 @@ class Login {
             $this->Error = ['Os dados informados não são compatíveis'];
             $this->Result = FALSE;
         elseif ($this->Result['user_level'] < $this->Level):
-            $this->Error = ["Desculpe <b>{$this->Result['user_name']}</b>, você não tem permissão para acessar esta área!", WS_ERROR];
+            $this->Error = ["Desculpe <b>{$this->Result['user_name']}</b>, você não tem permissão para acessar esta área!"];
             $this->Result = FALSE;
         else:
             $this->Execute();
